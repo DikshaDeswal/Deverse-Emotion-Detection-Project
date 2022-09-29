@@ -1,0 +1,10 @@
+{% extends 'base.html'%}
+
+{% block head %}
+<title>Output Video</title>
+{% endblock %}
+
+{% block body %}
+<h1>Emotions detected</h1>
+<img src="{{url_for('video_feed')}}">
+{% endblock %}

@@ -40,100 +40,108 @@ def img_to_array(img, data_format='channels_last', dtype='float32'):
     return x
 
 
-face_classifier = cv2.CascadeClassifier(r'haarcascade_frontalface_default.xml')
-classifier =load_model(r'model 2.h5')
+def EmotionDetectProcess():
 
-emotion_labels = ['Angry','Disgust','Fear','Happy','Neutral', 'Sad', 'Surprise']
-arr=[]
-time=[]
-emotion=[]
-list = [0] * 7
-i=0
+    face_classifier = cv2.CascadeClassifier(r'haarcascade_frontalface_default.xml')
+    classifier =load_model(r'model 2.h5')
 
-cap = cv2.VideoCapture(0)
+    emotion_labels = ['Angry','Disgust','Fear','Happy','Neutral', 'Sad', 'Surprise']
+    arr=[]
+    time=[]
+    emotion=[]
+    list = [0] * 7
+    i=0
 
-while True:
-    _, frame = cap.read()
-    labels = []
-    if (_==False):
-        break
+    cap = cv2.VideoCapture(r"static/video/1.mp4")
 
-    gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
-    faces = face_classifier.detectMultiScale(gray)
+    while (cap.isOpened()):
+        print("loop is running")
+        _, frame = cap.read()
+        labels = []
+        if (_==False):
+            break
 
-    for (x,y,w,h) in faces:
-        cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,255),2)
-        roi_gray = gray[y:y+h,x:x+w]
-        roi_gray = cv2.resize(roi_gray,(48,48),interpolation=cv2.INTER_AREA)
+        gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
+        faces = face_classifier.detectMultiScale(gray)
 
-
-
-        if np.sum([roi_gray])!=0:
-            roi = roi_gray.astype('float')/255.0
-            roi = img_to_array(roi)
-            roi = np.expand_dims(roi,axis=0)
-
-            prediction = classifier.predict(roi)[0]
-            label=emotion_labels[prediction.argmax()]
-            #print(label)
-            time.append(i+1)
-            i=i+1
-            if(label=='Happy') :
-                arr.append(1)
-                emotion.append(label)
-                list[0]+=1
-            elif(label=='Neutral'):
-                arr.append(2)
-                emotion.append(label)
-                list[1] += 1
-            elif (label == 'Sad'):
-                arr.append(3)
-                emotion.append(label)
-                list[2] += 1
-            elif (label == 'Angry'):
-                arr.append(4)
-                emotion.append(label)
-                list[3] += 1
-            elif (label == 'Fear'):
-                arr.append(5)
-                emotion.append(label)
-                list[4] += 1
-            elif (label == 'Disgust'):
-                arr.append(6)
-                emotion.append(label)
-                list[5] += 1
-            elif (label == 'Surprise'):
-                arr.append(7)
-                emotion.append(label)
-                list[6] += 1
-
-            label_position = (x,y)
-            cv2.putText(frame,label,label_position,cv2.FONT_HERSHEY_SIMPLEX,1,(0,255,0),2)
-        else:
-            cv2.putText(frame,'No Faces',(30,80),cv2.FONT_HERSHEY_SIMPLEX,1,(0,255,0),2)
-    cv2.imshow('Emotion Detector',frame)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-
-cap.release()
-cv2.destroyAllWindows()
-
-# create plot
+        for (x,y,w,h) in faces:
+            cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,255),2)
+            roi_gray = gray[y:y+h,x:x+w]
+            roi_gray = cv2.resize(roi_gray,(48,48),interpolation=cv2.INTER_AREA)
 
 
-keys = ['Happy', 'Neutral', 'Sad', 'Angry', 'Fear','Disgust','Surprise']
-palette_color = sns.color_palette('bright')
-fig=plt.pie(list, labels=keys, colors=palette_color, autopct='%.0f%%')
-plt.savefig("Output2.jpg")
-plt.close()
 
-import seaborn as sns
-sns.set()
-sns_plot1 = sns.scatterplot(time, arr)
-fig1 = sns_plot1.get_figure()
-fig1.savefig("output1.jpg")
+            if np.sum([roi_gray])!=0:
+                roi = roi_gray.astype('float')/255.0
+                roi = img_to_array(roi)
+                roi = np.expand_dims(roi,axis=0)
 
-palette_color = sns.color_palette('bright')
-sns_plot3=sns.countplot(emotion)
-fig2 = sns_plot3.get_figure()
-fig2.savefig("Output3.jpg")
+                prediction = classifier.predict(roi)[0]
+                label=emotion_labels[prediction.argmax()]
+                #print(label)
+                time.append(i+1)
+                i=i+1
+                if(label=='Happy') :
+                    arr.append(1)
+                    emotion.append(label)
+                    list[0]+=1
+                elif(label=='Neutral'):
+                    arr.append(2)
+                    emotion.append(label)
+                    list[1] += 1
+                elif (label == 'Sad'):
+                    arr.append(3)
+                    emotion.append(label)
+                    list[2] += 1
+                elif (label == 'Angry'):
+                    arr.append(4)
+                    emotion.append(label)
+                    list[3] += 1
+                elif (label == 'Fear'):
+                    arr.append(5)
+                    emotion.append(label)
+                    list[4] += 1
+                elif (label == 'Disgust'):
+                    arr.append(6)
+                    emotion.append(label)
+                    list[5] += 1
+                elif (label == 'Surprise'):
+                    arr.append(7)
+                    emotion.append(label)
+                    list[6] += 1
+
+                label_position = (x,y)
+                cv2.putText(frame,label,label_position,cv2.FONT_HERSHEY_SIMPLEX,1,(0,255,0),2)
+            else:
+                cv2.putText(frame,'No Faces',(30,80),cv2.FONT_HERSHEY_SIMPLEX,1,(0,255,0),2)
+        frame = cv2.imencode('.JPEG', frame, [cv2.IMWRITE_JPEG_QUALITY, 80])[1].tobytes()
+        sleep(0.016)
+        yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+        # cv2.imshow('Emotion Detector',frame)
+        # if cv2.waitKey(1) & 0xFF == ord('q'):
+        #     break
+
+    # cap.release()
+    # cv2.destroyAllWindows()
+
+
+
+# # create plot
+#
+#
+# keys = ['Happy', 'Neutral', 'Sad', 'Angry', 'Fear','Disgust','Surprise']
+# palette_color = sns.color_palette('bright')
+# fig=plt.pie(list, labels=keys, colors=palette_color, autopct='%.0f%%')
+# plt.savefig("Output2.jpg")
+# plt.close()
+#
+# import seaborn as sns
+# sns.set()
+# sns_plot1 = sns.scatterplot(time, arr)
+# fig1 = sns_plot1.get_figure()
+# fig1.savefig("output1.jpg")
+#
+# palette_color = sns.color_palette('bright')
+# sns_plot3=sns.countplot(emotion)
+# fig2 = sns_plot3.get_figure()
+# fig2.savefig("Output3.jpg")

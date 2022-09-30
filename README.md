@@ -44,7 +44,7 @@ MyFeedback108 web application successfully predicts emotions using a number of o
 # Requirements
 - Python 3.x
 
-#Run the project
+# Run the project
 - Clone git repo in git bash
 - In terminal run 'pip install requirements.txt'
 - Run python app.py

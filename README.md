@@ -16,17 +16,17 @@ Homepage constitutes the basic features of application mentioned in the navigati
 ## Home >> My Product
 - Consists lists of client products uploaded for analysis
 - Click on image of product to choose product
-![](./images/My Product.jpeg)
+![](./images/myproduct.jpeg)
 
 ## Home >> MyProduct >> Base
 - Upload video of consumer reactions 
 - Press register Button!
 - Video is successfully uploaded for analysis
-![](./images/base.jpeg)
+![](./images/uploadvideo.jpeg)
 
 ## Home >> MyProduct >> Base >> VideoUpload
 - Displays detected emotions with sufficient accuracy
-![](./images/emotion.jpeg)
+![](./images/output.jpeg)
 
 ## Tech Stack
 MyFeedback108 web application successfully predicts emotions using a number of open source python libraries and tools:
@@ -38,7 +38,7 @@ MyFeedback108 web application successfully predicts emotions using a number of o
 - tensorflow - 0.11.2
 
 ## Future Enhancement 
-
+![](./images/scope.jpeg)
 
 ## Installation
 # Requirements

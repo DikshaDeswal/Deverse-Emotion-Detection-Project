@@ -1,0 +1,18 @@
+{% extends 'base.html'%}
+
+{% block head %}
+<title>Output Video</title>
+<style>
+    .center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+<h1>Emotions detected</h1>
+<img src="{{url_for('video_feed')}}" class="center" width=600px height=600px">
+{% endblock %}
